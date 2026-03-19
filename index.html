@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Women Safe</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-database.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCjEOS0SXlc7IbK_yEQXW7iRV6lOTCWrnI",
+    authDomain: "women-safety-website-72aae.firebaseapp.com",
+    projectId: "women-safety-website-72aae",
+    storageBucket: "women-safety-website-72aae.firebasestorage.app",
+    messagingSenderId: "34394438020",
+    appId: "1:34394438020:web:f057909545ab4db43045d1",
+    measurementId: "G-BLRHJ5WB45"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  window.db = getDatabase(app);
+
+</script>
+
+<header>
+
+<div class="logo">
+<i class="fa-solid fa-shield-heart"></i>
+<div>
+<h2>WOMEN SAFE</h2>
+<p>Emergency SOS</p>
+</div>
+</div>
+
+<nav>
+<a class="active">Home</a>
+<a>Features</a>
+<a>Safety Tips</a>
+<a>Contact</a>
+</nav>
+
+</header>
+
+
+<section class="hero">
+
+<div class="hero-left">
+
+<h1>Your Safety is <br><span>Our Priority</span></h1>
+
+<p>Press the SOS Button during Emergency</p>
+
+<button class="sos" onclick="sendSOS()"> SOS</button>
+<a href="tel:112">
+  <button class="call-btn">Call Police 🚔</button>
+</a>
+
+
+</button>
+
+</div>
+
+
+<div class="hero-right">
+
+<!-- YAHAN APNI IMAGE DALNA -->
+
+<img src="images/women.jpg">
+
+</div>
+
+</section>
+
+
+<section class="features">
+
+<h2>Features</h2>
+
+<div class="boxes">
+
+<div class="card">
+<i class="fa-solid fa-location-dot"></i>
+<h3>Location Sharing</h3>
+<p>Share your live location</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-phone"></i>
+<h3>Emergency Alerts</h3>
+<p>Instant SOS to police</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-phone-volume"></i>
+<h3>Quick Call</h3>
+<p>Call for help quickly</p>
+</div>
+
+</div>
+
+</section>
+
+
+<div class="tips">
+
+💡 Safety Tips • Avoid dark places • Share location with family • Save emergency numbers
+
+</div>
+  <script type="module">
+import { ref, get, push, set } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-database.js";
+window.sendSOS = function () {
+  navigator.geolocation.getCurrentPosition((position) => {
+
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    const link = `https://www.google.com/maps?q=${lat},${lon}`;
+
+    get(ref(window.db,'contacts')).then((snapshot) => {
+
+      if (snapshot.exists()) {
+        const contacts = snapshot.val();
+
+        Object.values(contacts).forEach(c => {
+          let msg = `🚨 EMERGENCY! My location: ${link}`;
+          window.open(`https://wa.me/${c.phone}?text=${encodeURIComponent(msg)}`);
+        });
+
+      } else {
+        alert("No contacts saved");
+      }
+
+    });
+
+  });
+}
+window.saveContact = function () {
+
+  let name = document.getElementById("name").value;
+  let email = document.getElementById("email").value;
+  let phone = document.getElementById("phone").value;
+
+  const newRef = push(ref(db, 'contacts'));
+
+  set(newRef, {
+    name: name,
+    email: email,
+    phone: phone
+  });
+
+  alert("Contact Saved ✅");
+};
+</script>  
+  
+  
+
+</script>
+<!-- Contact Form -->
+<div>
+  <input type="text" id="name" placeholder="Enter Name">
+  <input type="email" id="email" placeholder="Enter Email">
+  <input type="text" id="phone" placeholder="Enter Phone Number">
+  <button onclick="saveContact()">Save Contact</button>
+</div>
+
+</body>
+</html>
